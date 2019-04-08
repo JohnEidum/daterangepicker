@@ -1278,10 +1278,12 @@
                 }
                 this.endDate = null;
                 this.setStartDate(date.clone());
+                this.onStartSelect();
             } else if (!this.endDate && date.isBefore(this.startDate)) {
                 //special case: clicking the same date for start/end,
                 //but the time of the end date is before the start date
                 this.setEndDate(this.startDate.clone());
+                this.onEndSelect();
             } else { // picking end
                 if (this.timePicker) {
                     var hour = parseInt(this.container.find('.right .hourselect').val(), 10);
@@ -1297,6 +1299,7 @@
                     date = date.clone().hour(hour).minute(minute).second(second);
                 }
                 this.setEndDate(date.clone());
+                this.onEndSelect();
                 if (this.autoApply) {
                   this.calculateChosenLabel();
                   this.clickApply();
@@ -1305,6 +1308,7 @@
 
             if (this.singleDatePicker) {
                 this.setEndDate(this.startDate);
+                this.onEndSelect();
                 if (!this.timePicker)
                     this.clickApply();
             }
@@ -1346,6 +1350,14 @@
                 }
                 this.showCalendars();
             }
+        },
+
+        onStartSelect: function(e) {
+            this.element.trigger('startSelect.daterangepicker', this);
+        },
+
+        onEndSelect: function(e) {
+            this.element.trigger('endSelect.daterangepicker', this);
         },
 
         clickApply: function(e) {
